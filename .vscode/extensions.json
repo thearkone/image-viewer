@@ -1,0 +1,11 @@
+{
+	"recommendations": [
+		"bungcip.better-toml",
+
+		// VSCode only
+		"rust-lang.rust-analyzer",
+
+		// Code only
+		"matklad.rust-analyzer"
+	]
+}
