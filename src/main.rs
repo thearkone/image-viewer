@@ -5,7 +5,7 @@ use cli::Cli;
 use clap::Parser;
 use fltk::app::App;
 use fltk::enums::FrameType;
-use fltk::enums::{Align, Color, Event, Key};
+use fltk::enums::{Color, Event, Key};
 use fltk::frame::Frame;
 use fltk::image::{BmpImage, GifImage, IcoImage, JpegImage, PngImage, SvgImage};
 use fltk::prelude::{GroupExt, ImageExt, WidgetBase, WidgetExt, WindowExt};
@@ -52,13 +52,30 @@ fn main() {
 	let app = App::default();
 	let mut window = Window::new(0, 0, window_width, window_height, name).center_screen();
 
-	let mut frame = Frame::default().with_size(window_width, window_height).center_of(&window);
+	let mut frame = Frame::default().with_size(window_width, window_height).center_of_parent();
 	frame.set_frame(FrameType::NoBox);
-	frame.set_align(Align::Center);
 
 	frame.draw(move |f| {
 		image.scale(f.w(), f.h(), true, false);
-		image.draw(f.x(), f.y(), f.width(), f.height());
+
+		let image_width = image.width();
+		let image_height = image.height();
+
+		let frame_width = f.width();
+		let frame_height = f.height();
+
+		let mut x = 0;
+		let mut y = 0;
+
+		if image_width < frame_width {
+			x = (frame_width - image_width) / 2;
+		}
+
+		if image_height < frame_height {
+			y = (frame_height - image_height) / 2;
+		}
+
+		image.draw(x, y, frame_width, frame_height);
 	});
 
 	window.handle(|win, event| {
