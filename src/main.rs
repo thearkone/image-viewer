@@ -5,7 +5,7 @@ use cli::Cli;
 use clap::Parser;
 use fltk::app::App;
 use fltk::enums::FrameType;
-use fltk::enums::{Align, Color};
+use fltk::enums::{Align, Color, Event, Key};
 use fltk::frame::Frame;
 use fltk::image::{BmpImage, GifImage, IcoImage, JpegImage, PngImage, SvgImage};
 use fltk::prelude::{GroupExt, ImageExt, WidgetBase, WidgetExt, WindowExt};
@@ -59,6 +59,33 @@ fn main() {
 	frame.draw(move |f| {
 		image.scale(f.w(), f.h(), true, false);
 		image.draw(f.x(), f.y(), f.width(), f.height());
+	});
+
+	window.handle(|win, event| {
+		match event {
+			Event::KeyUp => {
+				let key = fltk::app::event_key();
+
+				match key {
+					Key::Escape => {
+						win.hide();
+						return true;
+					},
+					_ => {
+						let char = key.to_char().unwrap();
+
+						match char {
+							'q' => {
+								win.hide();
+								true
+							},
+							_ => false,
+						}
+					},
+				}
+			},
+			_ => false,
+		}
 	});
 
 	window.set_color(Color::from_rgb(255, 255, 255));
