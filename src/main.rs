@@ -28,8 +28,7 @@ fn main() {
 	}
 
 	let file_extension = path.extension().unwrap().to_str().unwrap();
-	let file_name = path.file_name().unwrap().to_str().unwrap();
-	let name: &'static str = Box::leak(file_name.to_string().into_boxed_str());
+	let file_name = path.file_name().unwrap().to_os_string().into_string().unwrap();
 
 	let (screen_width, screen_height) = fltk::app::screen_size();
 
@@ -48,11 +47,12 @@ fn main() {
 
 	let window_width = image.width().min(screen_width as i32);
 	let window_height = image.height().min(screen_height as i32);
+	let window_title: &'static str = Box::leak(file_name.into_boxed_str());
 
 	let app = App::default();
-	let mut window = Window::new(0, 0, window_width, window_height, name).center_screen();
+	let mut window = Window::new(0, 0, window_width, window_height, window_title).center_screen();
 
-	let mut frame = Frame::default().with_size(window_width, window_height).center_of_parent();
+	let mut frame = Frame::default().with_size(window_width, window_height);
 	frame.set_frame(FrameType::NoBox);
 
 	frame.draw(move |f| {
@@ -86,7 +86,7 @@ fn main() {
 				match key {
 					Key::Escape => {
 						win.hide();
-						return true;
+						true
 					},
 					_ => {
 						let char = key.to_char().unwrap();
