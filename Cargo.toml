@@ -7,4 +7,4 @@ rust-version = "1.70"
 
 [dependencies]
 clap = { version = "4.3.11", features = ["derive"] }
-fltk = { version = "1.4.7", features = ["use-wayland"] }
+fltk = { version = "1.4.7", features = ["use-wayland", "system-fltk"] }
